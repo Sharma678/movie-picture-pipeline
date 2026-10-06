@@ -1,27 +1,39 @@
-backend-ci:
-  runs-on: ubuntu-latest
+name: Backend Continuous Integration
 
-  defaults:
-    run:
-      working-directory: starter/backend
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+defaults:
+  run:
+    working-directory: starter/backend
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
+jobs:
+  backend-ci:
+    runs-on: ubuntu-latest
 
-    - name: Install Pipenv
-      run: pip install pipenv
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: pipenv install
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Run lint
-      run: pipenv run lint
+      - name: Install Pipenv
+        run: pip install pipenv
 
-    - name: Run tests
-      run: pipenv run test
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      - name: Run lint
+        run: pipenv run lint
+
+      - name: Run tests
+        run: pipenv run test
