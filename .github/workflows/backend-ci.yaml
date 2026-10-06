@@ -37,3 +37,15 @@ jobs:
 
       - name: Run tests
         run: pipenv run test
+
+  backend-build:
+    needs: backend-ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build backend Docker image
+        working-directory: starter/backend
+        run: docker build --tag mp-backend:latest .
