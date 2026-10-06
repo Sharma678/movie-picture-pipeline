@@ -15,6 +15,7 @@ defaults:
 
 jobs:
   lint:
+    name: Backend Lint
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +37,7 @@ jobs:
         run: pipenv run lint
 
   test:
+    name: Backend Test
     runs-on: ubuntu-latest
 
     steps:
@@ -55,3 +57,19 @@ jobs:
 
       - name: Run tests
         run: pipenv run test
+
+  build:
+    name: Backend Build
+    needs:
+      - lint
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: starter/backend
+        run: |
+          docker build --tag mp-backend:latest .
